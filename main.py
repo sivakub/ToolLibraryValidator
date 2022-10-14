@@ -1,4 +1,3 @@
-import json
 import os
 import lib.lib as lib
 import argparse
@@ -25,8 +24,7 @@ if os.path.isfile(file_):
             if not tool.hasValidUnit(toolItem):
                 lib.msg("Unit should be either 'millimeters' or 'inches'")
 
-            if not tool.hasValidBMC(toolItem):
-                lib.msg("BMC should be must be one of " + (str(lib.fusionBMCs()).replace('[', '').replace(']', '')))
+            tool.hasValidBMC(toolItem)
 
             if not tool.hasValidGrade(toolItem):
                 lib.msg("GRADE should be must be one of " + (str(lib.vaildGrades()).replace('[', '').replace(']', '')))

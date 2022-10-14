@@ -59,10 +59,21 @@ class Tool:
             grade = self.getToolData(num)['GRADE']
             return True if grade in vaildGrades() else False
 
+        return True
+
     def hasValidBMC(self, num):
         bmc = self.getToolData(num)['BMC']
-        return True if bmc in fusionBMCs() else False
 
+        if bmc not in fusionBMCs():
+            msg("")
+            msg("  BMC should be must be one of " + (str(fusionBMCs()).replace('[', '').replace(']', '')))
+
+            return False
+        dataType = pramsType().get(type(bmc))
+        if "BMC" not in dataType:
+            msg("  Data Type of BMC is wrong it should be String")
+            return False
+        return True
 
     def getToolGeometry(self, num):
         if 'geometry' in self.getToolData(num):
@@ -104,8 +115,9 @@ class Tool:
         reqposts = []
         if toolClassification == "milling" or toolClassification == 'hole making':
             reqposts = fusionMillingPostProcess()
-            for m in self.getToolData(num)['post-process']:
-                reqposts.remove(m)
+
+        for m in self.getToolData(num)['post-process']:
+            reqposts.remove(m)
 
         if len(reqposts) > 0:
             msg("")
@@ -154,6 +166,7 @@ def fusionToolTypes():
         "laser wire"
     ]
 
+
 def fusionBMCs():
     return [
         "unspecified",
@@ -176,11 +189,11 @@ def fusionMillingPostProcess():
 def pramsType():
     return {
         int: {"DC", "LB", "LCF", "NOF", "OAL", "SFDM", "shoulder-length", "RE", "TA", "tip-diameter", "NT",
-              "thread-profile-angle", "tip-length"},
+              "thread-profile-angle", "tip-length", "SIG"},
         float: {"DC", "LB", "LCF", "OAL", "SFDM", "shoulder-length", "RE", "TA", "tip-diameter", "NT",
-                "thread-profile-angle", "tip-length"},
+                "thread-profile-angle", "tip-length", "SIG"},
         bool: {"CSP", "HAND"},
-        str: {}
+        str: {"BMC"}
 
     }
 
@@ -199,7 +212,20 @@ def millRequiredPrams():
         "thread mill": {"CSP", "DC", "LB", "LCF", "NOF", "OAL", "SFDM", "shoulder-length", "HAND", "NT", "TP",
                         "thread-profile-angle"},
         "tapered mill": {"CSP", "DC", "LB", "LCF", "NOF", "OAL", "SFDM", "shoulder-length", "HAND", "RE", "TA"},
-        "radius mill": {"CSP", "DC", "LB", "LCF", "NOF", "OAL", "SFDM", "shoulder-length", "HAND", "RE", "tip-length"}
+        "radius mill": {"CSP", "DC", "LB", "LCF", "NOF", "OAL", "SFDM", "shoulder-length", "HAND", "RE", "tip-length"},
+        "drill": {"CSP", "DC", "LB", "LCF", "NOF", "OAL", "SFDM", "shoulder-length", "HAND", "SIG"},
+        "spot drill": {"CSP", "DC", "LB", "LCF", "NOF", "OAL", "SFDM", "shoulder-length", "HAND", "SIG",
+                       "tip-diameter"},
+        "counter sink": {"CSP", "DC", "LB", "LCF", "NOF", "OAL", "SFDM", "shoulder-length", "HAND", "SIG",
+                         "tip-diameter"},
+        "center drill": {"CSP", "DC", "LB", "LCF", "NOF", "OAL", "SFDM", "shoulder-length", "HAND", "SIG", "TA",
+                         "tip-diameter", "tip-length"},
+        "counter bore": {"CSP", "DC", "LB", "LCF", "NOF", "OAL", "SFDM", "shoulder-length", "HAND"},
+        "boring bar": {"CSP", "DC", "LB", "LCF", "NOF", "OAL", "SFDM", "shoulder-length", "HAND"},
+        "tap right hand": {"CSP", "DC", "LB", "LCF", "NOF", "OAL", "SFDM", "shoulder-length", "TP"},
+        "tap left hand": {"CSP", "DC", "LB", "LCF", "NOF", "OAL", "SFDM", "shoulder-length", "TP"},
+        "reamer": {"CSP", "DC", "LB", "LCF", "NOF", "OAL", "SFDM", "shoulder-length", "HAND"},
+        "probe":{"DC", "LB", "SFDM"}
     }
 
 
