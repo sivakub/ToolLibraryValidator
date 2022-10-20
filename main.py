@@ -26,8 +26,9 @@ if os.path.isfile(file_):
 
             tool.hasValidBMC(toolItem)
 
-            if not tool.hasValidGrade(toolItem):
-                lib.msg("GRADE should be must be one of " + (str(lib.vaildGrades()).replace('[', '').replace(']', '')))
+            # Grade is not used anymore
+            # if not tool.hasValidGrade(toolItem):
+            #     lib.msg("GRADE should be must be one of " + (str(lib.vaildGrades()).replace('[', '').replace(']', '')))
 
             tool.hasValidGeometry(toolItem)
 
